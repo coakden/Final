@@ -5,14 +5,14 @@
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "219494458",
+    "hash" : "2886666814",
     "id" : "1CB611AA",
-    "lastKnownWriteTime" : 1524003968,
-    "last_content_update" : 1524003968319,
+    "lastKnownWriteTime" : 1524004383,
+    "last_content_update" : 1524004383931,
     "path" : "~/GitHub/Final/slides/index.Rmd",
     "project_path" : "slides/index.Rmd",
     "properties" : {
-        "cursorPosition" : "43,0",
+        "cursorPosition" : "42,63",
         "scrollLine" : "21",
         "tempName" : "Untitled1"
     },
