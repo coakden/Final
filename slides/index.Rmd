@@ -40,5 +40,8 @@ tail(ddclean)
 
 ```
 ---
-![drink]("https://media.giphy.com/media/GpRR4MIkIEfIs/giphy.gif")
+.center[
+![drink](https://github.com/nate-koser/Final/blob/master/figs/vokdachug.gif?raw=true)
+]
+
 
