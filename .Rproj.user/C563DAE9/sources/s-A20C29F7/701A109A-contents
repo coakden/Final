@@ -1,0 +1,22 @@
+library(tidyverse)
+library(readr)
+
+dddata <- read_csv("data_raw/2016_dddata.csv")                #import data
+  
+head(dddata)                                                  #take a peek
+
+
+ddclean <- dddata %>%                                         #spring cleaning
+  select(., - CountType) %>%                                  #not sure why this column exists
+  gather(., January, February, March, April, May, June,       
+         July, August, September, October, November, December,#get all the months in a single column 
+         key = "month", value = "count") %>%                  
+  spread(., key = "Category", value = "count")                #Category column actually 3 variables
+
+ddclean <- rename(ddclean, timeofday = TimeOfDay, abv = ABV)  #don't like mix of upper/lowercase
+
+head(ddclean)                                                 #much better!
+tail(ddclean)                                                  
+
+
+write_csv(ddclean, "data_tidy/ddclean.csv")                   #write tidy data to new .csv
