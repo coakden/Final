@@ -40,5 +40,5 @@ tail(ddclean)
 
 ```
 ---
-![drink]("../figs/vodkachug")
+![drink]("https://github.com/nate-koser/Final/blob/master/figs/vokdachug.gif?raw=true")
 
