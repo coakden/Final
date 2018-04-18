@@ -1,5 +1,5 @@
 ---
-title: "Drunk Driving in Korea"
+title: "Drunk Driving"
 subtitle: "Data Science For Linguistics"
 author: "Nate Koser"
 date: "Rutgers University </br> `r Sys.Date()`"
@@ -38,7 +38,7 @@ trying to finish my QP
 
 --
 
-- found a website [kosis.kr](kosis.kr) with lots of data on things in Korea
+- found a website (kosis.kr) with lots of data on things in Korea
 
 --
 
@@ -50,13 +50,18 @@ trying to finish my QP
 
 ---
 
-```{r, message = FALSE}
+#Import
+```{r import, message = FALSE}
 dddata <- read_csv("../data_raw/2016_dddata.csv")                #import data
-  
-head(dddata)                                                  #take a peek
 
+head(dddata)                                                     #take a peek
+```
 
-ddclean <- dddata %>%                                         #spring cleaning
+---
+
+#Tidy
+```{r tidy, message = FALSE}
+ddclean <- dddata %>%                                         
   select(., - CountType) %>%                                  #not sure why this column exists
   gather(., January, February, March, April, May, June,       
          July, August, September, October, November, December,#get all the months in a single column 
@@ -65,10 +70,21 @@ ddclean <- dddata %>%                                         #spring cleaning
 
 ddclean <- rename(ddclean, timeofday = TimeOfDay, abv = ABV)  #don't like mix of upper/lowercase
 
-head(ddclean)                                                 #much better!
-tail(ddclean)                                                  
+```
+---
 
+#Much better!
+```{r}
+head(ddclean, 4)                                                 
+tail(ddclean, 4)                                                  
 
 ```
+
+---
+
+#Research questions
+
+
+
 
 

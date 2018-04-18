@@ -22,5 +22,3 @@ tail(ddclean)
 write_csv(ddclean, "data_tidy/ddclean.csv")                   #write tidy data to new .csv
 
 
-head(dddata)
-dㅇㅇ
