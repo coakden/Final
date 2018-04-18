@@ -1,31 +1,57 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Presentation Ninja</title>
+    <title>Drunk Driving in Korea</title>
     <meta charset="utf-8">
-    <meta name="author" content="Yihui Xie" />
-    <link href="libs/remark-css/default.css" rel="stylesheet" />
-    <link href="libs/remark-css/default-fonts.css" rel="stylesheet" />
+    <meta name="author" content="Nate Koser" />
+    <link href="libs/remark-css/rutgers.css" rel="stylesheet" />
+    <link href="libs/remark-css/rutgers-fonts.css" rel="stylesheet" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Presentation Ninja
-## ⚔<br/>with xaringan
-### Yihui Xie
-### 2016/12/12
+# Drunk Driving in Korea
+## Data Science For Linguistics
+### Nate Koser
+### Rutgers University </br> 2018-04-17
 
 ---
 
 
 
+#Good luck!
+--
+&lt;br&gt;
+&lt;br&gt;
+.center[
+![drink](https://github.com/nate-koser/Final/blob/master/figs/vokdachug.gif?raw=true)
+
+trying to finish my QP
+]
+
+---
+
+#The Data
+
+- no data of my own
+
+--
+
+- found a website [kosis.kr](kosis.kr) with lots of data on things in Korea
+
+--
+
+- pulled one about drunk driving in 2016
+
+--
+
+- not linguistic, but relevant
+
+---
 
 
 ```r
-library(tidyverse)
-library(readr)
-
 dddata &lt;- read_csv("../data_raw/2016_dddata.csv")                #import data
   
 head(dddata)                                                  #take a peek
@@ -85,16 +111,14 @@ tail(ddclean)
 ## 5 unspecified night     October    7499    207    10861
 ## 6 unspecified night     September  6577    159     9457
 ```
----
-.center[
-![drink](https://github.com/nate-koser/Final/blob/master/figs/vokdachug.gif?raw=true)
-]
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="https://www.jvcasillas.com/ru_xaringan/js/ru_xaringan.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "highlightLines": true,
-"countIncrementalSlides": false
+"countIncrementalSlides": false,
+"ratio": "16:9"
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

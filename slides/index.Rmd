@@ -1,25 +1,56 @@
 ---
-title: "Presentation Ninja"
-subtitle: "⚔<br/>with xaringan"
-author: "Yihui Xie"
-date: "2016/12/12"
+title: "Drunk Driving in Korea"
+subtitle: "Data Science For Linguistics"
+author: "Nate Koser"
+date: "Rutgers University </br> `r Sys.Date()`"
 output:
   xaringan::moon_reader:
     lib_dir: libs
+    css: ["rutgers", "rutgers-fonts"]
     nature:
+      beforeInit: "https://www.jvcasillas.com/ru_xaringan/js/ru_xaringan.js"
       highlightStyle: github
       highlightLines: true
       countIncrementalSlides: false
+      ratio: "16:9"
 ---
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
-```
-
-```{r, message = FALSE}
 library(tidyverse)
 library(readr)
+```
+#Good luck!
+--
+<br>
+<br>
+.center[
+![drink](https://github.com/nate-koser/Final/blob/master/figs/vokdachug.gif?raw=true)
 
+trying to finish my QP
+]
+
+---
+
+#The Data
+
+- no data of my own
+
+--
+
+- found a website [kosis.kr](kosis.kr) with lots of data on things in Korea
+
+--
+
+- pulled one about drunk driving in 2016
+
+--
+
+- not linguistic, but relevant
+
+---
+
+```{r, message = FALSE}
 dddata <- read_csv("../data_raw/2016_dddata.csv")                #import data
   
 head(dddata)                                                  #take a peek
@@ -39,9 +70,5 @@ tail(ddclean)
 
 
 ```
----
-.center[
-![drink](https://github.com/nate-koser/Final/blob/master/figs/vokdachug.gif?raw=true)
-]
 
 
