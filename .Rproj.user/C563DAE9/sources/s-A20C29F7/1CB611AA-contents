@@ -1,5 +1,5 @@
 ---
-title: "Drunk Driving"
+title: "Final Presentation"
 subtitle: "Data Science For Linguistics"
 author: "Nate Koser"
 date: "Rutgers University </br> `r Sys.Date()`"
@@ -19,6 +19,7 @@ output:
 options(htmltools.dir.version = FALSE)
 library(tidyverse)
 library(readr)
+library(tinytex)
 ```
 #Good luck!
 --
@@ -60,13 +61,14 @@ head(dddata)                                                     #take a peek
 ---
 
 #Tidy
-```{r tidy, message = FALSE}
+```{r tidy, message = FALSE, warning = FALSE}
 ddclean <- dddata %>%                                         
   select(., - CountType) %>%                                  #not sure why this column exists
   gather(., January, February, March, April, May, June,       
          July, August, September, October, November, December,#get all the months in a single column 
          key = "month", value = "count") %>%                  
-  spread(., key = "Category", value = "count")                #Category column actually 3 variables
+  spread(., key = "Category", value = "count") %>%            #Category column actually 3 variables
+  filter(., ABV != "unspecified")                             #not necessarily helpful
 
 ddclean <- rename(ddclean, timeofday = TimeOfDay, abv = ABV)  #don't like mix of upper/lowercase
 
@@ -74,7 +76,7 @@ ddclean <- rename(ddclean, timeofday = TimeOfDay, abv = ABV)  #don't like mix of
 ---
 
 #Much better!
-```{r}
+```{r cleandata}
 head(ddclean, 4)                                                 
 tail(ddclean, 4)                                                  
 
@@ -84,6 +86,144 @@ tail(ddclean, 4)
 
 #Research questions
 
+- Are there more cases of drunk driving at night than during the day?
+
+- Does the month have any effect on the number of cases? For example in a month with a major holiday, maybe we could expect more incidents.
+
+- In the ABV column there is a value ">0.35%". Is there a greater rate of injury when this level of intoxication is acheived? 
+
+---
+
+#Descriptive Statistics
+
+night and day?
+
+```{r stattable, echo = F}
+
+ddclean %>% 
+  group_by(., timeofday) %>% 
+  summarize(CasesMean = round(mean(log(cases), na.rm = T),2), 
+            CasesSd = round(sd(log(cases), na.rm = T),2), 
+            InjuriesMean = round(mean(log(injuries), na.rm = T),2), 
+            InjuriesSd = round(sd(log(injuries), na.rm = T),2))%>% 
+  knitr::kable(., format = 'markdown')
+```
+
+---
+
+#Descriptive Statistics
+
+by month?
+
+```{r stattablemonths, echo = F}
+ddclean %>% 
+  group_by(., month) %>% 
+  summarize(CasesMean = round(mean(log(cases), na.rm = T),2), 
+            CasesSd = round(sd(log(cases), na.rm = T),2), 
+            InjuriesMean = round(mean(log(injuries), na.rm = T),2), 
+            InjuriesSd = round(sd(log(injuries), na.rm = T),2))%>% 
+  knitr::kable(., format = 'markdown')
+```
+
+
+---
+
+#Descriptive Statistics
+
+high ABV vs. other ABV injuries
+
+```{r stattableabv, echo = F}
+otherabv <- ddclean %>%
+  filter(., abv != ">0.35%" & abv != "unmeasured" & abv != "noncompliant")
+
+highabv <- ddclean %>%
+  filter(., abv == ">0.35%") 
+
+```
+| ABV        | Injuries as percent of cases | 
+| :-         | :-                           | 
+| over .35   | `r round(sum(highabv$injuries, na.rm = T)/sum(highabv$cases, na.rm = T), 2)` | 
+| under .35  | `r round(sum(otherabv$injuries, na.rm = T)/sum(otherabv$cases, na.rm = T), 2)` | 
+
+--
+
+split a bit differently?
+
+```{r stattableabv2, echo = F}
+higherabv <- ddclean %>%
+  filter(., abv == ">0.35%" | abv == "0.30%~0.34%") 
+lowerabv <- ddclean %>%
+  filter(., abv != ">0.35%" & abv != "unmeasured" & abv != "noncompliant" & abv != "0.30%~0.34%")
+```
+
+| ABV        | Injuries as percent of cases | 
+| :-         | :-                           | 
+| over .30   | `r round(sum(higherabv$injuries, na.rm = T)/sum(higherabv$cases, na.rm = T), 2)` | 
+| under .30  | `r round(sum(lowerabv$injuries, na.rm = T)/sum(lowerabv$cases, na.rm = T), 2)` | 
+
+---
+
+#Plots
+
+.center[day vs night
+
+```{r daynight, echo = F, warning = F, fig.width=10, fig.height=6}
+ddclean %>%
+  mutate(., timeofday_n = as.numeric(as.factor(timeofday)) -1) %>%
+  ggplot(., aes(x = cases, y = timeofday_n)) +
+  geom_point() +
+  geom_smooth(method = "glm", method.args = list(family = "binomial"), na.rm = T)
+```
+]
+---
+
+#Plots
+
+.center[cases by month
+
+```{r bymonth, echo = F, fig.width=10, fig.height=6}
+ggplot(ddclean, aes(x = month, y = log(cases))) +
+  geom_boxplot(na.rm = TRUE, color = "black", fill = "lightsteelblue3") +
+  geom_hline(yintercept = 3, lty = 2, size = .5, color = "orangered") +
+  coord_flip()
+```
+]
+---
+
+#Plots
+
+.center[injuries/case by ABV
+
+```{r byabv, echo = F, fig.width=10, fig.height=6}
+
+onlynum <- ddclean %>%
+filter(., abv != "unmeasured" & abv != "noncompliant")
+
+ggplot(onlynum, aes(x = abv, y = log((injuries/cases)))) +
+  geom_boxplot(na.rm = TRUE, color = "black", fill = "lightsteelblue3")+
+  coord_flip() 
+```
+]
+
+---
+
+#Going forward
+
+- fit models
+
+- identify significant effects/interactions
+
+- answer research questions
+
+---
+
+<br>
+<br>
+<br>
+<br>
+.center[
+#Thanks for listening!
+]
 
 
 

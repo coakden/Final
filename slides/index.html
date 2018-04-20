@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Drunk Driving</title>
+    <title>Final Presentation</title>
     <meta charset="utf-8">
     <meta name="author" content="Nate Koser" />
     <link href="libs/remark-css/rutgers.css" rel="stylesheet" />
@@ -11,10 +11,10 @@
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
-# Drunk Driving
+# Final Presentation
 ## Data Science For Linguistics
 ### Nate Koser
-### Rutgers University </br> 2018-04-17
+### Rutgers University </br> 2018-04-20
 
 ---
 
@@ -82,7 +82,8 @@ ddclean &lt;- dddata %&gt;%
   gather(., January, February, March, April, May, June,       
          July, August, September, October, November, December,#get all the months in a single column 
          key = "month", value = "count") %&gt;%                  
-  spread(., key = "Category", value = "count")                #Category column actually 3 variables
+  spread(., key = "Category", value = "count") %&gt;%            #Category column actually 3 variables
+  filter(., ABV != "unspecified")                             #not necessarily helpful
 
 ddclean &lt;- rename(ddclean, timeofday = TimeOfDay, abv = ABV)  #don't like mix of upper/lowercase
 ```
@@ -110,17 +111,126 @@ tail(ddclean, 4)
 
 ```
 ## # A tibble: 4 x 6
-##   abv         timeofday month     cases deaths injuries
-##   &lt;chr&gt;       &lt;chr&gt;     &lt;chr&gt;     &lt;int&gt;  &lt;int&gt;    &lt;int&gt;
-## 1 unspecified night     May        6699    114     9713
-## 2 unspecified night     November   6920    162    10019
-## 3 unspecified night     October    7499    207    10861
-## 4 unspecified night     September  6577    159     9457
+##   abv        timeofday month     cases deaths injuries
+##   &lt;chr&gt;      &lt;chr&gt;     &lt;chr&gt;     &lt;int&gt;  &lt;int&gt;    &lt;int&gt;
+## 1 unmeasured night     May          10      0       15
+## 2 unmeasured night     November      7      1        6
+## 3 unmeasured night     October      13      0       25
+## 4 unmeasured night     September    10      1       15
 ```
 
 ---
 
 #Research questions
+
+- Are there more cases of drunk driving at night than during the day?
+
+- Does the month have any effect on the number of cases? For example in a month with a major holiday, maybe we could expect more incidents.
+
+- In the ABV column there is a value "&gt;0.35%". Is there a greater rate of injury when this level of intoxication is acheived? 
+
+---
+
+#Descriptive Statistics
+
+night and day?
+
+
+|timeofday | CasesMean| CasesSd| InjuriesMean| InjuriesSd|
+|:---------|---------:|-------:|------------:|----------:|
+|day       |      2.92|    1.63|         3.40|       1.73|
+|night     |      3.58|    2.01|         4.05|       2.09|
+
+---
+
+#Descriptive Statistics
+
+by month?
+
+
+|month     | CasesMean| CasesSd| InjuriesMean| InjuriesSd|
+|:---------|---------:|-------:|------------:|----------:|
+|April     |      3.43|    1.93|         4.00|       1.83|
+|August    |      3.26|    1.86|         3.68|       2.02|
+|December  |      3.30|    2.05|         3.68|       2.25|
+|February  |      3.16|    1.99|         3.78|       1.90|
+|January   |      3.22|    1.93|         3.61|       2.13|
+|July      |      3.06|    2.01|         3.55|       2.02|
+|June      |      3.10|    1.80|         3.55|       1.95|
+|March     |      3.31|    1.94|         3.82|       1.96|
+|May       |      3.38|    1.80|         3.93|       1.79|
+|November  |      3.36|    2.01|         3.74|       2.20|
+|October   |      3.34|    1.87|         3.81|       2.00|
+|September |      3.25|    1.75|         3.74|       1.88|
+
+
+---
+
+#Descriptive Statistics
+
+high ABV vs. other ABV injuries
+
+
+| ABV        | Injuries as percent of cases | 
+| :-         | :-                           | 
+| over .35   | 1.28 | 
+| under .35  | 1.74 | 
+
+--
+
+split a bit differently?
+
+
+
+| ABV        | Injuries as percent of cases | 
+| :-         | :-                           | 
+| over .30   | 1.67 | 
+| under .30  | 1.74 | 
+
+---
+
+#Plots
+
+.center[day vs night
+
+![](index_files/figure-html/daynight-1.png)&lt;!-- --&gt;
+]
+---
+
+#Plots
+
+.center[cases by month
+
+![](index_files/figure-html/bymonth-1.png)&lt;!-- --&gt;
+]
+---
+
+#Plots
+
+.center[injuries/case by ABV
+
+![](index_files/figure-html/byabv-1.png)&lt;!-- --&gt;
+]
+
+---
+
+#Going forward
+
+- fit models
+
+- identify significant effects/interactions
+
+- answer research questions
+
+---
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+.center[
+#Thanks for listening!
+]
     </textarea>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script src="https://www.jvcasillas.com/ru_xaringan/js/ru_xaringan.js"></script>
