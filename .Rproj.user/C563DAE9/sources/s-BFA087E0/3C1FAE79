@@ -1,0 +1,23 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1525652461720.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "3C1FAE79",
+    "lastKnownWriteTime" : 1525704664,
+    "last_content_update" : 1525704664763,
+    "path" : "~/GitHub/Final/paper/final.Rmd",
+    "project_path" : "paper/final.Rmd",
+    "properties" : {
+        "cursorPosition" : "180,56",
+        "scrollLine" : "175",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

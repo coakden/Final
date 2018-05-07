@@ -184,7 +184,7 @@ ddclean %>%
 ```{r bymonth, echo = F, fig.width=10, fig.height=6}
 ggplot(ddclean, aes(x = month, y = log(cases))) +
   geom_boxplot(na.rm = TRUE, color = "black", fill = "lightsteelblue3") +
-  geom_hline(yintercept = 3, lty = 2, size = .5, color = "orangered") +
+  geom_hline(yintercept = 3.04, lty = 2, size = .5, color = "orangered") +
   coord_flip()
 ```
 ]

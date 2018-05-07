@@ -1,5 +1,6 @@
 library(tidyverse)
 library(readr)
+library(dplyr)
 
 dddata <- read_csv("data_raw/2016_dddata.csv")                #import data
   
@@ -33,19 +34,92 @@ mean(ddclean$cases, na.rm = TRUE, trim = .1)
 
 ggplot(ddclean, aes(x = month, y = log(cases)))+
   geom_boxplot(na.rm = TRUE, color = "black", fill = "lightsteelblue3")+
-  geom_hline(yintercept = 3, lty = 2, size = .5, color = "orangered") +
+  geom_hline(yintercept = 3.04, lty = 2, size = .5, color = "orangered") +
   coord_flip()
 
 glm(cases ~ timeofday, 
     data = ddnoUn, 
-    family = poisson(link = "log"))
+    family = binomial(link = "logit"))
   
 ggplot(ddclean, aes(x = injuries, y = cases), na.rm = T) +
   geom_point() +
   geom_smooth(method = lm)
 
 
+median(log(ddcleaner$cases), na.rm = T)
 
+ddcleaner <- ddclean %>%
+  mutate(., timeofday_n = as.numeric(as.factor(timeofday)) -1) %>%
+  select(., -timeofday)
+
+modday_null <- glm(timeofday_n ~ 1, data = ddcleaner, family = binomial(link = "logit"))
+summary(modday_null)
+modday_cases <- glm(timeofday_n ~ cases, data = ddcleaner, family = binomial(link = "logit"))
+summary(modday_cases)
+
+modmonth <- glm(month_n ~ cases, data = ddmonth, family = binomial)
+summary(modmonth)
+modmonthA <- glm(month_n ~ cases, data = ddmonthA, family = binomial)
+summary(modmonthA)
+modmonday <- glm(cases ~ month + timeofday_n, data = ddcleaner, family = gaussian)
+summary(modmonday)
+modint <- glm(cases ~ month + timeofday_n * month, data = ddcleaner, family = gaussian)
+summary(modint)
+
+moddeath <- glm(abv_n ~ deathchance, data = ddabv, family = binomial)
+summary(moddeath)
+
+
+ddabv <- ddclean %>%
+  mutate(., abv_n = if_else(.$abv == ">0.35%", 
+                              as.double(1), as.double(0))) %>%
+  mutate(., deathchance = (deaths/cases))
+
+ddmonth <- ddclean %>%
+  mutate(., month_n = if_else(.$month == "January", 
+                            as.double(1), as.double(0)))
+
+ddmonthA <- ddclean %>%
+  mutate(., month_n = ifelse(.$month == c("December", "January", "February", "September"), 
+                              as.double(1), as.double(0)))
+
+ddmonthA %>%
+  ggplot(., aes(x = cases, y = month_n)) + 
+  geom_point() + 
+  geom_smooth(method = "glm", method.args = list(family = "binomial"), na.rm = T)
+
+ddabv %>%
+  ggplot(., aes(x = log(deaths/cases), y = abv_n)) + 
+  geom_point() + 
+  geom_smooth(method = "glm", method.args = list(family = "binomial"), na.rm = T)
+
+library(boot)
+inv.logit(-8.63)
+inv.logit(0.057)
+inv.logit(10)
+
+mean(log(ddclean$cases), na.rm = T)
+
+(-2.11 + -13.04 * .5)
+
+
+inv_logit(modday_cases)
+
+1/(1+exp(.48)) #est nd
+1/(1+exp(-.01)) #est case
+(.48 + .01 * 10) 
+
+
+exp(-0.48)/(1+exp(-0.48)) #est nd
+exp(-0.48)/(1+exp(0.001)) #est case
+
+(-0.846 + 0.057 * 10)
+
+log(-0.276)
+
+(.38 + .50 * 200)
+
+anova(modday_null, modday_cases)
 
 as.factor(ddclean$timeofday)
 
@@ -139,4 +213,10 @@ as.numeric(as.factor(factor(ddclean$abv, c(">0.35%", "0.05%~0.09%", "0.10%~0.14%
 
 ggplot(onlynum, aes(x = abv, y = log(injuries)))+
   geom_point(na.rm = TRUE, color = "black", fill = "lightsteelblue3")
+
+library(lingStuff)
+
+inv_logit_manual(-0.846 + 0.057 * 100)
+
+inv.logit(-.276)
 
